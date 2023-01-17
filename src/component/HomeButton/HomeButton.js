@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {useState, useEffect } from "react";
 
 import { NavLink } from "react-router-dom";
 import './HomeButton.css'
@@ -10,63 +10,45 @@ import video_2 from '../../video/v2.mp4'
 
 
 
-const vi = [
-    {
-        vURL: video_1
-    },
-
-    {
-        vURL: video_2
-    }
-
-]
+const video = [video_1, video_2]
 
 const HomeButton = () => {
 
 
     const [modalShow, setModalShow] = useState(false);
     const [randomUrl, setRandomUrl] = useState('');
-   
 
-    const handleShow = () => {
-      var randomIndex = Math.floor(Math.random() * vi.length);
-      var randomUrl = vi[randomIndex]; 
-      setRandomUrl(randomUrl);
-      setModalShow(true);
-    }
+    const [currentVideo, setCurrentVideo] = useState(0);   
+
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentVideo((currentVideo) => (currentVideo + 1) % video.length);
+        }, 10000);
+        return () => clearInterval(interval);
+      }, []);
+
+
+
+    // const handleShow = () => {
+    //   var randomIndex = Math.floor(Math.random() * vi.length);
+    //   var randomUrl = vi[randomIndex]; 
+    //   setRandomUrl(randomUrl);
+    //   setModalShow(true);
+    // }
     
     
     return(
-        <> 
-           <div className="button_section">
-                <div className="container">
-                    <div className="button_inner">
-                        <div className="button_group">
-                            <div className="button_list">
-                            <div>
-                            <button  onClick={() => {
-                                handleShow()
-                                setModalShow(true)
-                            } }  > Play Video</button>
- 
-                            <MyVerticallyCenteredModal url={randomUrl}  show={modalShow} onHide={() => setModalShow(false)} />  
-                            </div>
-                                <NavLink to="/video" >Index</NavLink>
-                            </div>
-                        </div>
-                        <div className="statement">
-                            <NavLink>Statement</NavLink>
-                        </div>
-                    </div>
-                </div>
-            </div> 
-        </>
+      
+
+        <video controls src={video[currentVideo]} autoPlay loop />
+           
     )
 }
 
 
 
-function MyVerticallyCenteredModal(props ) {
+// function MyVerticallyCenteredModal(props ) {
   
     // const duration = video.duration;
 
@@ -97,39 +79,39 @@ function MyVerticallyCenteredModal(props ) {
 
  
 
-    return(
-        <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-    >
-        <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter"> 
-        </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        <div className="video_item"> 
+//     return(
+//         <Modal
+//         {...props}
+//         size="lg"
+//         aria-labelledby="contained-modal-title-vcenter"
+//         centered
+//     >
+//         <Modal.Header closeButton>
+//         <Modal.Title id="contained-modal-title-vcenter"> 
+//         </Modal.Title>
+//         </Modal.Header>
+//         <Modal.Body>
+//         <div className="video_item"> 
             
+//             { props.url.vURL}
+// {/*             
+//            { setInterval(() => {
+//                 { return props.url.videoLink}
+//             }, 5000)} */}
 
-{/*             
-           { setInterval(() => {
-                { return props.url.videoLink}
-            }, 5000)} */}
-
-           {/* // for(let i = 0; i <= 20 ; i++ ){
-    //    setInterval(() => {
-    //     console.log(i)
-    //    }, 1000);
-    // } */}
+//            {/* // for(let i = 0; i <= 20 ; i++ ){
+//     //    setInterval(() => {
+//     //     console.log(i)
+//     //    }, 1000);
+//     // } */}
 
 
 
-        </div>
-        </Modal.Body> 
-    </Modal>
-    )
+//         </div>
+//         </Modal.Body> 
+//     </Modal>
+//     )
 
-}
+// }
 
 export default HomeButton
